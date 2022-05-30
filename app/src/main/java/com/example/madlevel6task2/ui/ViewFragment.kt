@@ -1,4 +1,4 @@
-package com.example.madlevel6task2
+package com.example.madlevel6task2.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

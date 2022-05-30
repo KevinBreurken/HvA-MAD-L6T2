@@ -1,4 +1,4 @@
-package com.example.madlevel6task2
+package com.example.madlevel6task2.ui
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.example.madlevel6task2.R
 import com.example.madlevel6task2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
