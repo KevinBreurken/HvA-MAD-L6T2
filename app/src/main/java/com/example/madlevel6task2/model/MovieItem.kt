@@ -4,5 +4,5 @@ data class MovieItem(
     val id: Number,
     val posterPath: String,
 ) {
-    fun getPosterImageById() = "https://image.tmdb.org/t/p/original/$posterPath"
+    fun getPosterImage() = "https://image.tmdb.org/t/p/original/$posterPath"
 }

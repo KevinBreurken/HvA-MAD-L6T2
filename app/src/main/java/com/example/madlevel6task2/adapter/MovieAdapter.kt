@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.madlevel6task2.R
 import com.example.madlevel6task2.databinding.ItemMovieBinding
 import com.example.madlevel6task2.model.MovieItem
+
 
 class MovieAdapter(private val movies: List<MovieItem>, private val onClick: (MovieItem) -> Unit) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
@@ -35,7 +37,10 @@ class MovieAdapter(private val movies: List<MovieItem>, private val onClick: (Mo
         private val binding = ItemMovieBinding.bind(itemView)
 
         fun bind(movieItem: MovieItem) {
-            Glide.with(context).load(movieItem.posterPath).into(binding.posterView)
+            val options: RequestOptions = RequestOptions()
+                .centerCrop()
+                .error(R.mipmap.ic_launcher_round)
+            Glide.with(context).load(movieItem.getPosterImage()).apply(options).into(binding.posterView)
         }
     }
 
