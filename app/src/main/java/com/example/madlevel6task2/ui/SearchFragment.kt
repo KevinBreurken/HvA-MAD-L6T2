@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +16,6 @@ import com.example.madlevel6task2.adapter.MovieAdapter
 import com.example.madlevel6task2.databinding.FragmentSearchBinding
 import com.example.madlevel6task2.model.MovieItem
 import com.example.madlevel6task2.vm.MovieViewModel
-import com.google.android.material.snackbar.Snackbar
-import java.time.LocalDate
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -26,7 +25,7 @@ class SearchFragment : Fragment() {
     private val movies = arrayListOf<MovieItem>()
     private lateinit var movieAdapter: MovieAdapter
     private var _binding: FragmentSearchBinding? = null
-    private val viewModel: MovieViewModel by viewModels()
+    private val viewModel: MovieViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -56,7 +55,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeVideos() {
-        viewModel.movieItems.observe(viewLifecycleOwner, {
+        viewModel.movies.observe(viewLifecycleOwner, {
             movies.clear()
             movies.addAll(it)
             movieAdapter.notifyDataSetChanged()
@@ -72,17 +71,20 @@ class SearchFragment : Fragment() {
 
 
         searchForMovies(yearDateString.toInt())
-
     }
 
     private fun searchForMovies(year: Int) {
+        movies.clear()
+        movieAdapter.notifyDataSetChanged()
 
+        viewModel.getMoviesByYear(year)
     }
 
-    private fun onMovieClick(colorItem: MovieItem) {
-        Snackbar.make(binding.buttonSearch, colorItem.posterPath, Snackbar.LENGTH_LONG)
-            .show()
+    private fun onMovieClick(movieItem: MovieItem) {
 
+        print(movieItem)
+        print(movieItem.title)
+        viewModel.select(movies[0])
         findNavController().navigate(R.id.action_FirstFragment_to_viewFragment)
     }
 

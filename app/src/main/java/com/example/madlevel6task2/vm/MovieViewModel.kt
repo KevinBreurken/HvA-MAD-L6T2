@@ -1,5 +1,6 @@
 package com.example.madlevel6task2.vm
 
+import android.graphics.Movie
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,24 +13,24 @@ import kotlinx.coroutines.launch
 class MovieViewModel : ViewModel() {
     private val movieRepository = MovieRepository()
 
-    //use encapsulation to expose as LiveData
-    val movieItems: LiveData<List<MovieItem>>
-        get() = _movieItems
-
-    private val _movieItems = MutableLiveData<List<MovieItem>>().apply {
-        value = movieRepository.getMovieItems()
+    val _selectedItem: MutableLiveData<MovieItem> = MutableLiveData()
+    fun select(movie: MovieItem) {
+        this._selectedItem.value = movie
     }
 
-    fun getMovies() {
+    private val _errorText: MutableLiveData<String> = MutableLiveData()
+    val errorText: LiveData<String>
+        get() = _errorText
+
+    val movies = movieRepository.movies;
+    fun getMoviesByYear(year: Int) {
         viewModelScope.launch {
-//            try {
-//                //the triviaRepository sets it's own livedata property
-//                //our own trivia property points to this one
-//                movieRepository.getMovieItemss()
-//            } catch (error: MovieRepository.MovieRefreshError) {
-//                _movieItems.value = error.message
-//                Log.e("Triva error", error.cause.toString())
-//            }
+            try {
+                movieRepository.getMoviesOfYear(year)
+            } catch (error: MovieRepository.MovieNotFoundError) {
+                _errorText.value = error.message
+                Log.e("Fetch error", error.cause.toString())
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MovieApi {
     companion object {
         // The base url off the api.
-        private const val baseUrl = "http://numbersapi.com/"
+        private const val baseUrl = "https://api.themoviedb.org/"
 
         /**
          * @return [TriviaApiService] The service class off the retrofit client.
@@ -20,14 +20,14 @@ class MovieApi {
                 .build()
 
             // Create the Retrofit instance
-            val triviaApi = Retrofit.Builder()
+            val movieApi = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
             // Return the Retrofit NumbersApiService
-            return triviaApi.create(MovieApiService::class.java)
+            return movieApi.create(MovieApiService::class.java)
         }
     }
 }
