@@ -35,31 +35,30 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         movieAdapter = MovieAdapter(movies, ::onMovieClick)
-        binding.moviesLayout.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.moviesLayout.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.moviesLayout.adapter = movieAdapter
 
         binding.buttonSearch.setOnClickListener {
             onSubmitClicked()
         }
-        observeVideos()
-    }
 
-    private fun observeVideos() {
+        //Setup observer for when the movies are changed in the viewmodel.
         viewModel.movies.observe(viewLifecycleOwner, {
+            binding.progressbar.visibility = View.INVISIBLE
             movies.clear()
             movies.addAll(it)
             movieAdapter.notifyDataSetChanged()
         })
+        binding.progressbar.visibility = View.INVISIBLE
     }
 
     private fun onSubmitClicked() {
@@ -69,22 +68,17 @@ class SearchFragment : Fragment() {
             return
         }
 
+        if (yearDateString.length != 4) {
+            Toast.makeText(activity, "Year must be a valid year (length of 4)", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        searchForMovies(yearDateString.toInt())
-    }
-
-    private fun searchForMovies(year: Int) {
-        movies.clear()
-        movieAdapter.notifyDataSetChanged()
-
-        viewModel.getMoviesByYear(year)
+        binding.progressbar.visibility = View.VISIBLE
+        viewModel.getMoviesByYear(yearDateString.toInt())
     }
 
     private fun onMovieClick(movieItem: MovieItem) {
-
-        print(movieItem)
-        print(movieItem.title)
-        viewModel.select(movies[0])
+        viewModel.select(movieItem)
         findNavController().navigate(R.id.action_FirstFragment_to_viewFragment)
     }
 
