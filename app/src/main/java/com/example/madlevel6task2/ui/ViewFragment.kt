@@ -47,18 +47,20 @@ class ViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       viewModel._selectedItem.observe(viewLifecycleOwner) { loadMovieItem(it)
-       Toast.makeText(context,it.backdropPath,Toast.LENGTH_LONG).show()}
+       viewModel._selectedItem.observe(viewLifecycleOwner) { loadMovieItem(it)}
     }
 
     fun loadMovieItem(movieItem:MovieItem){
+
+        binding.titleLabel.text = movieItem.title
+        binding.releaseLabel.text = movieItem.releaseDate
+        binding.overviewText.text = movieItem.overview
+        binding.ratingText.text = movieItem.voteAverage
+
         val options: RequestOptions = RequestOptions()
             .centerCrop()
             .error(R.mipmap.ic_launcher_round)
-
-        context?.let { Glide.with(it).load(movieItem.getPosterImage()).apply(options).transition(
-            DrawableTransitionOptions.withCrossFade(1000)).into(binding.detailPosterView) }
-
+        //Create custom animation for the Backdrop
         val animationObject =
             ViewPropertyTransition.Animator { view ->
                 view.alpha = 0f
@@ -71,15 +73,12 @@ class ViewFragment : Fragment() {
                 scaleAnim.start()
             }
 
+        //Poster
+        context?.let { Glide.with(it).load(movieItem.getPosterImage()).apply(options).transition(
+            DrawableTransitionOptions.withCrossFade(1000)).into(binding.detailPosterView) }
+        //Backdrop
         context?.let { Glide.with(it).load(movieItem.getBackdropImage()).apply(options).transition(
             GenericTransitionOptions.with(animationObject)).into(binding.detailBackdropView) }
-
-        print(viewModel._selectedItem)
-        binding.titleLabel.text = movieItem.title
-        binding.releaseLabel.text = movieItem.releaseDate
-
-        binding.overviewText.text = movieItem.overview
-        binding.ratingText.text = movieItem.voteAverage
     }
 
     override fun onDestroyView() {

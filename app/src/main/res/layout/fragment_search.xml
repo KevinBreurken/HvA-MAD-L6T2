@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.SearchFragment">
 
-    <RelativeLayout
-        android:id="@+id/rlOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#323232"
-        android:backgroundTint="#424141" />
-
     <EditText
         android:id="@+id/yearInput"
         android:layout_width="100dp"
